@@ -817,31 +817,33 @@ public class POS extends javax.swing.JFrame {
         if(jTable1.getRowCount()==0)
         {
             JOptionPane.showMessageDialog(frame,"Please Select Items to order","Warning",JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        else if("".equals(jtextDisplay.getText()))
+        if("".equals(jtextDisplay.getText()))
         {
             JOptionPane.showMessageDialog(frame,"Please Enter Amount to pay","Warning",JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        else if(jcboPayment.getSelectedItem().equals("Cash"))
+        if(jcboPayment.getSelectedItem().equals("Cash"))
         {
             double cChange = Change();
             if(cChange < 0)
             {
                 JOptionPane.showMessageDialog(frame,"Entered Amount is not sufficient","Warning",JOptionPane.WARNING_MESSAGE);
                 jtextDisplay.setText("");
+                return;
             }
-            else
-            {
-                String ChangeGiven = String.format("₹ %.2f", cChange);
-                jtextChange.setText(ChangeGiven);
-                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-                model.addRow(new Object[]{"Gross Total","",jtextSubTotal.getText()});
-                model.addRow(new Object[]{"G.S.T Added","",jtextGST.getText()});
-                model.addRow(new Object[]{"Net Total","",jtextTotal.getText()});
-                model.addRow(new Object[]{"Mode of Payment","",jcboPayment.getSelectedItem()});
-                model.addRow(new Object[]{"Received","","₹ "+jtextDisplay.getText()});
-                model.addRow(new Object[]{"Balance returned","",jtextChange.getText()});
-            }
+           
+            String ChangeGiven = String.format("₹ %.2f", cChange);
+            jtextChange.setText(ChangeGiven);
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.addRow(new Object[]{"Gross Total","",jtextSubTotal.getText()});
+            model.addRow(new Object[]{"G.S.T Added","",jtextGST.getText()});
+            model.addRow(new Object[]{"Net Total","",jtextTotal.getText()});
+            model.addRow(new Object[]{"Mode of Payment","",jcboPayment.getSelectedItem()});
+            model.addRow(new Object[]{"Received","","₹ "+jtextDisplay.getText()});
+            model.addRow(new Object[]{"Balance returned","",jtextChange.getText()});
+
         }
         else if("Credit Card".equals(jcboPayment.getSelectedItem()))
         {
@@ -965,75 +967,70 @@ public class POS extends javax.swing.JFrame {
 
     private void jbtnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPrintActionPerformed
         
-        boolean warning = false;
         if(jTable1.getRowCount()==0)
         {
-            warning = true;
             JOptionPane.showMessageDialog(frame,"Please Select Items to order","Warning",JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        else if("".equals(jtextCName.getText()) && "".equals(jtextCNum.getText()))
+        if("".equals(jtextCName.getText()) && "".equals(jtextCNum.getText()))
         {
-            warning = true;
             JOptionPane.showMessageDialog(frame,"Customer Name and Contact Number is required","Warning",JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        else if("".equals(jtextCName.getText()))
+        if("".equals(jtextCName.getText()))
         {
-            warning = true;
             JOptionPane.showMessageDialog(frame,"Customer Name is required","Warning",JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        else if(jtextCName.getText().length()>0){
+        if(jtextCName.getText().length()>0){
             if(jtextCName.getText().contains(" "))
             {
+                
                 String[] arr = jtextCName.getText().split(" ");
                 for(String str:arr)
                 {
                     if(!Pattern.matches("[a-zA-Z]+",str))
                     {
-                        warning = true;
-                        break;
+                        JOptionPane.showMessageDialog(frame,"Customer Name is should contain only alphabets","Warning",JOptionPane.WARNING_MESSAGE);
+                        return;
                     }
-                }
-                if(warning)
-                {
-                    JOptionPane.showMessageDialog(frame,"Customer Name is should contain only alphabets","Warning",JOptionPane.WARNING_MESSAGE);
                 }
             }
             else
             {
                 if(!Pattern.matches("[a-zA-Z]+",jtextCName.getText()))
                 {
-                    warning = true;
                     JOptionPane.showMessageDialog(frame,"Customer Name is should contain only alphabets","Warning",JOptionPane.WARNING_MESSAGE);
+                    return;
                 }
             }
         }
-        else if("".equals(jtextCNum.getText()))
+        if("".equals(jtextCNum.getText()))
         {
-            warning = true;
             JOptionPane.showMessageDialog(frame,"Customer Contact number is required","Warning",JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        else if(jtextCNum.getText().length() != 10)
+        if(jtextCNum.getText().length() != 10)
         {
-            warning = true;
             JOptionPane.showMessageDialog(frame,"Customer Contact number should be 10 digits","Warning",JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        if(!warning)
-        {
-            points = points*(0.1);
-            
-            MessageFormat header = new MessageFormat("S.R.S.T Shop No 48 Main Road Anna Nagar Chennai");
-            MessageFormat footer = new MessageFormat("Customer Name : "+jtextCName.getText()+" Contact Number: "+jtextCNum.getText()+" Points Earned: "
-            +Double.toString(points));
+        
+        points = points*(0.1);
 
-            try
-            {
-                jTable1.print(JTable.PrintMode.NORMAL,header,footer);
-            }
-            catch(java.awt.print.PrinterException e)
-            {
-                System.err.format("No Printer Found", e.getMessage());
-            }
+        MessageFormat header = new MessageFormat("S.R.S.T Shop No 48 Main Road Anna Nagar Chennai");
+        MessageFormat footer = new MessageFormat("Customer Name : "+jtextCName.getText()+" Contact Number: "+jtextCNum.getText()+" Points Earned: "
+        +Double.toString(points));
+
+        try
+        {
+            jTable1.print(JTable.PrintMode.NORMAL,header,footer);
         }
+        catch(java.awt.print.PrinterException e)
+        {
+            System.err.format("No Printer Found", e.getMessage());
+        }
+        
     }//GEN-LAST:event_jbtnPrintActionPerformed
 
     private void jbtnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRemoveActionPerformed
