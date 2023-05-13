@@ -1010,6 +1010,11 @@ public class POS extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(frame,"Customer Contact number is required","Warning",JOptionPane.WARNING_MESSAGE);
             return;
         }
+        if(!Pattern.matches("[0-9]+",jtextCNum.getText()))
+                {
+                    JOptionPane.showMessageDialog(frame,"Customer Contact number is should contain only digits","Warning",JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
         if(jtextCNum.getText().length() != 10)
         {
             JOptionPane.showMessageDialog(frame,"Customer Contact number should be 10 digits","Warning",JOptionPane.WARNING_MESSAGE);
