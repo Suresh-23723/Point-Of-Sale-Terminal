@@ -23,11 +23,8 @@ Clone the repository:
 ```
 git clone https://github.com/Suresh-23723/Point-of-Sale-Terminal.git
 ```
-Navigate to the dist folder in the repository
+Navigate to the dist folder in the repository in the terminal
 
-```
-cd Point-of-Sale-Terminal\dist
-```
 Run the application:
 
 ```
